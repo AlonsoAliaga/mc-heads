@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="https://cdn.discordapp.com/emojis/791742603183259648.webp?size=96&quality=lossless" type="image/x-icon">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+    <title>Minecraft Headds | AlonsoAliaga Development</title>
+    
+    <meta name="theme-color" content="#9a14ff"/>
+    <meta property="og:title" content="Minecraft Heads | AlonsoAliaga Development">
+    <meta property="og:image" content="https://i.imgur.com/zHZd4Uj.png">
+    <meta property="og:description" content="Search fast between thousands of heads easily and get them in game. BetterHeads support!">
+    <meta property="og:url" content="https://alonsoaliaga.github.io/index.html">
+  </head>
+  <body onload="loadCounter(); checkSite(window); ">
+    <div class="content">
+      <div class="header">
+        <h1 style="font-family: MinecraftBold;">Minecraft <a href="https://alonsoaliaga.com/BetterHeads" rel="noopener" target="_blank">Heads</a></h1>
+        
+        <div class="options" style="padding: 10px 10px 10px 10px; margin-bottom: 10px;">
+          <h2 class="rainbow" style="font-size:25px; color:transparent">What is this?</h2>
+          This is a tool that allows server owners to find heads easily.<br>
+          It also provides additional data about the head on how to obtain it in game.<br><br>
+          <span style="font-size: 17px;">
+            <b>⚠️ Issues with our tool? Join our <a href="https://alonsoaliaga.com/discord" rel="noopener" target="_blank">official discord server.</a></b><br>
+            <I>Disclaimer: This site is in BETA and works only for <a href="https://alonsoaliaga.com/BetterHeads" rel="noopener" target="_blank">BetterHeads</a> v2.0-BETA or newer.</I>
+          </span>
+        </div>
+        <span id="snackbar"><b>💎 Successfully Copied! 💎</b><br><span style="font-size: small;">Thanks for using our tool!</span></span>
+        <span style="font-family: MinecraftBold;">Options:</span>
+        <div id="appearance" style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+          <input type="checkbox" checked id="darkmode" onclick="toggleDarkmode();" style="display: none"></input>
+          <label for="darkmode" style="margin-bottom: 0px;margin-top: 0px;"> Dark Mode 👁‍🗨</label>
+        </div>
+        <div id="easy-movement-div" style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+          <input type="checkbox" checked id="easy-movement" onclick="toggleEasyMovement();" style="display: inline-block"></input>
+          <label id="easy-movement-text" for="easy-movement" style="margin-bottom: 0px;margin-top: 0px;"> Loading.. 🔍</label>
+        </div><br><br>
+        <input id="inputText" style="text-align: center; display: inline-block; width: 50%;font-family: MinecraftBold;padding: 15px 15px 15px 15px;"
+          type="text" maxlength="5000" checked id="darkmode" class="darkbuttonboxes" 
+          placeholder="Search word"></input>
+        <br>
+        <!-- <input id="inputText" style="text-align: center; display: inline-block; width: 50%;font-family: MinecraftBold;padding: 15px 20px 15px 20px;"
+          type="text" maxlength="100" checked id="darkmode" value="alonsoaliaga.com" class="darkbuttonboxes" oninput="updateOutput(event)" 
+          placeholder="Type your text"></input> -->
+        <br>
+      </div>
+      <div>
+        <fieldset class="group" style="border-radius: 30px;padding: 0px;"> 
+          <legend id="thelegend">&nbsp;&nbsp;&nbsp;Select your search options 👁‍🗨&nbsp;&nbsp;&nbsp;</legend> 
+          <ul id="options-table" style="font-size: 18px;max-width: 100%;display: flex;flex-wrap: wrap;justify-content: center;">
+            <div style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+              <input type="checkbox" checked id="include-tags-option" style="display: inline-block;" onchange="processSearch();"></input>
+              <label for="include-tags-option" style="margin-bottom: 0px;margin-top: 0px;"> Include tags 🔖 </label>
+            </div>&nbsp;
+            <div style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+              <input type="checkbox" id="word-match-option" style="display: inline-block;" onchange="processSearch();"></input>
+              <label for="word-match-option" style="margin-bottom: 0px;margin-top: 0px;"> Word match ❓ </label>
+            </div>
+            <!-- <div style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+              <input type="checkbox" checked id="include-tags-option" style="display: inline-block;"></input>
+              <label for="include-tags-option" style="margin-bottom: 0px;margin-top: 0px;"> Include tags 🔖</label>
+            </div> -->
+          </ul>
+          <b>Search by category?</b>
+          <div id="categories-section">
+          </div>
+          <br>
+        </fieldset><br>
+      </div>
+      <div>
+        <div id="popupContainer" style="padding: 1px;">
+          <div id="popupContent" style="font-size: larger;border-radius: 20px;">
+            <h2 id="popupTitle">Loading Head Title..?</h2><br>
+            <img id="popupHeadImage" src="https://i.imgur.com/zHZd4Uj.png" alt="BetterHeads" style="width: 200px;height: auto;"><br><br>
+            <div style="position: relative;align-content: center;flex-wrap: wrap;justify-content: center;align-items: center; vertical-align: middle !important;display:flex">
+              <b>Head ID:&nbsp;</b><textarea id="popupHeadID" style="font-size: 20px !important;align-items: center;vertical-align: middle;justify-content: center;" class="locked-text">Loading..?</textarea>
+            </div>
+            <br>
+            <b>Tags: </b><span id="popupHeadTags">Unknown</span>
+            <br><br>
+            <b>BetterHeads command: (Since 2.0-BETA)</b>
+            <textarea id="popupBetterHeadsCommand" style="width: 100%;" class="locked-text">Loading..?</textarea>
+            <br><br>
+            <b>Obtain via /give command:</b><br>
+            <select id="giveCommandVersion" class="form-control dark" style="margin-bottom: 5px;text-align: center;width: 250px;border-radius: 5px;font-size: 20px;" onchange="updateCommand(event);">
+              <!-- <option value="0">None</option><option value="1">Rainbow</option><option value="2">Fire</option><option value="3">Sweet Morning</option><option value="4">Deep Space</option><option value="5">Superman</option><option value="6">Netflix</option><option value="7">Timber</option><option value="8">Piglet</option><option value="9">Instagram</option><option value="10">Twitch</option><option value="11">SoundCloud</option><option value="12">Facebook</option><option value="13">Amethyst</option><option value="14">Starfall</option><option value="15">Sunset</option><option value="16">JShine</option><option value="17">Candy</option><option value="18">Argon</option><option value="19">Cosmic Fusion</option><option value="20">Deep Blue</option><option value="21">Phoenix</option><option value="22">Sublime Light</option><option value="23">Sunrise</option><option value="24">Sky Glider</option><option value="25">Love Kiss</option><option value="26">TikTok</option><option value="27">Peach</option><option value="28">Electric Violet</option><option value="29">Party</option><option value="30">Purple Lake</option><option value="31">Quepal</option><option value="32">Fresh</option><option value="33">Skyline</option><option value="34">Mango</option><option value="35">Dawn</option><option value="36">Rose</option><option value="37">Firewatch</option> -->
+            </select><br>
+            <textarea id="popupObtainViaGiveCommand" style="width: 100%;" class="locked-text">Loading..?</textarea>
+            <br><br>
+            <b>Minecraft texture:</b>
+            <textarea id="popupMinecraftTexture" style="width: 100%;" class="locked-text">Loading..?</textarea>
+            <br><br>
+            <b>Value:</b>
+            <textarea id="popupTextureValue" style="width: 100%;" class="locked-text">Loading..?</textarea>
+
+            <button id="closeButton" class="darkbuttonboxes" style="font-size: 20px;padding: 5px 15px 5px 15px;">Close ❌</button>
+          </div>
+        </div>
+        <fieldset onmouseup="viewPageMouse(event);" class="group" style="border-radius: 30px;padding: 0px;"> 
+          <legend id="thelegend">&nbsp;&nbsp;&nbsp;Click the head to get more info 👁‍🗨&nbsp;&nbsp;&nbsp;</legend> 
+          <div id="pages-container-top" style="padding: 10px;"></div>
+          <ul id="heads-table" style="font-size: 18px;max-width: 100%;display:block;flex-wrap: wrap;justify-content: center;">
+            <!-- Populated by javascript -->
+            <span style="font-size: 40px;"><b>Loading heads..</b></span><br>
+            <img src="https://i.imgur.com/ADMJUlp.gif" width="250px"><br>
+            <span style="font-size: 40px;"><b>Please wait</b></span>
+          </ul>
+          <div id="pages-container-botton" style="padding: 10px;"></div>
+        </fieldset><br>
+      </div>
+      <!-- <div id="download-all" style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
+        <input type="button" style="outline: none; display: none;" checked id="downloadall" onclick="downloadAll();"></input>
+        <label for="downloadall" style="margin-bottom: 0px;margin-top: 0px;margin-left: 20px;;margin-right: 15px;"> Download your text 📥</label>
+      </div> -->
+      <!-- <br> -->
+      <!-- 
+      <label id="graylabel2" class="gray" for="outputText" style="font-weight: bold;"><span style="color: #fc5044;">TIP: </span>Click below to copy the content!</label>
+      <div id="result" onclick="copyTextToClipboard(this.textContent);">
+        <h2 style="font-family: MinecraftBold;">Loading..</h2>
+      </div>
+      -->
+      <!-- <br> -->
+      <!--
+      <div class="options">
+        <div id="table">
+          <input type="checkbox" id="version-mode" onclick="updateResult();"></input>
+          <label for="version-mode" style="margin-bottom: 0px;margin-top: 0px;"> Version Mode 🎉</label>
+          <input type="checkbox" id="whitelist-mode" onclick="updateResult();"></input>
+          <label for="whitelist-mode" style="margin-bottom: 0px;margin-top: 0px;"> Whitelist Mode 🏆</label>
+        </div><br>
+        <fieldset class="group"> 
+          <legend id="thelegend">&nbsp;&nbsp;&nbsp;Select errors to whitelist&nbsp;&nbsp;&nbsp;</legend> 
+          <ul id="table-errors" style="font-size: 18px;" class="checkbox">
+            Loading..
+          </ul> 
+        </fieldset><br>
+        <fieldset class="group" style="padding-bottom: 15px;font-size: 18px;"> 
+          <legend id="thelegend">&nbsp;&nbsp;&nbsp;Common options&nbsp;&nbsp;&nbsp;</legend> 
+          <ul id="table-protocols" class="checkbox">
+            <li>
+              <input class="button-solid" type="checkbox" id="mark-all-option" onclick="markAll(); this.checked = false">
+              <label for="mark-all-option" style="margin-bottom: 0px;margin-top: 0px;">✔️ Check all types</label></input>
+            </li>
+            <li>
+              <input class="button-solid" type="checkbox" id="unmark-all-option" onclick="unmarkAll(); this.checked = false">
+              <label for="unmark-all-option" style="margin-bottom: 0px;margin-top: 0px;">📛 Uncheck all types</label></input>
+            </li>
+          </ul> 
+        </fieldset>
+      </div>
+      -->
+      <!-- <div>
+        <div class="row">
+          <div class="col-md-3" style="font-size: 20px; font-family: MinecraftBold;">
+            <label for="output-indentation">Output indentation: </label>
+            <select id="output-indentation"
+                    class="form-control"
+                    onchange="updateOutputText(event);"
+                    style="font-size: 16px; padding: 5px 0px 5px 30px; width: auto; font-family: MinecraftRegular;">
+              <option value='0'>2 spaces</option>
+              <option value='1'>4 spaces</option>
+              <option value='2'>Tab spacing</option>
+            </select>
+          </div>
+        </div>
+      </div> -->
+      <div class="options">
+        <div style="font-size: 18px ;padding-top: 0px;padding-bottom: 0px; font-family: MinecraftRegular;" class="examples">
+          <h2 style="font-size: 18px; font-family: MinecraftBold;">More tools for you:</h2>
+          <div style="text-align: left;font-size: 20px;">
+            <span>💠</span> <span class="rainbow" style="color:transparent"><a href="http://alonsoaliaga.github.io/generator">HEX Generator (RBG)</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/font-generator">Font Generator</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/mcpfp">Pixel Art Minecraft Profile Picture Generator</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/config-comparator">Config Comparator Updater</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/yaml-parser">YAML/JSON Parser</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/pretty-json">Pretty JSON</a></span><br>
+            <span>💠</span> <span><a href="http://alonsoaliaga.github.io/version-generator">ViaVersion Protocol Generator</a></span>
+          </div>
+          <br>
+          <h2 style="color: transparent;font-size: 18px ;text-align: center; font-family: MinecraftBold;"><a href="https://alonsoaliaga.github.io" rel="noopener" target="_blank">AlonsoAliaga Development</a></h2>
+        </div>
+      </div>
+      <div>
+      <br>
+      <!-- <div id="mybutton">
+        <button class="buttonface"><a href="https://alonsoaliaga.github.io"><img src="https://raw.githubusercontent.com/AlonsoAliaga/alonsoaliaga.github.io/main/assets/img/apple-touch-icon.png"></a></button>
+      </div> -->
+      <div id="mybutton">
+        <div style="position: center;display: inline-block;">
+          <button class="buttonface"><a href="https://alonsoaliaga.github.io"><img src="https://raw.githubusercontent.com/AlonsoAliaga/alonsoaliaga.github.io/main/assets/img/apple-touch-icon.png"></a></button>
+          <br>
+          <div id="visitor-counter" style="text-align: center;">
+            <span id="counter-amount" style="font-family: MinecraftBold;font-weight: bold;">Visits: 0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script ></script>
+  </div>
+
+  <!-- <script src="jquery-1.6.1.min.js"></script> -->
+  <script src="autoresize.jquery.min.js"></script>
+  <script src="js-yaml.min.js"></script>
+  <script src="script.js"></script>
+  <!-- <script src="script.js"></script> -->
+  
+  <script>
+    
+  </script>
+  <span id="currentheadid" style="font-size: 5px; display: none;">0</span>
+  </body>
+</html>
