@@ -220,6 +220,51 @@ function alertCopied() {
 
   copiedTimeout = setTimeout(()=>{ sb.className = sb.className.replace("show", ""); }, 3000);
 }
+let suggestions = [
+  [
+    `<span style="color: gold"><b>Tip #1:</b></span>`,
+    `<span style="font-size: small;">Use control + click to</span>`,
+    `<span style="font-size: small;">copy texture value!</span>`
+  ],
+  [
+    `<span style="color: aqua"><b>Tip #2:</b></span>`,
+    `<span style="font-size: small;">Use your mouse button 'Forward'</span>`,
+    `<span style="font-size: small;">and 'Back' to move between pages!</span>`
+  ],
+  [
+    `<span style="color: lime"><b>Tip #3:</b></span>`,
+    `<span style="font-size: small;">Since BetterHeads version 2.0-BETA</span>`,
+    `<span style="font-size: small;">You can use '/bheads get ID' command!</span>`
+  ],
+]
+let suggestionIndex = 0;
+let suggestionTimeout;
+
+function alertSuggestions() {
+  
+  if(suggestions.length == 0) return;
+
+  if(suggestionIndex >= suggestions.length) suggestionIndex = 0;
+
+  if(suggestionTimeout) {
+    clearInterval(suggestionTimeout);
+    var sb = document.getElementById("suggestion-snackbar");
+    sb.className = sb.className.replace("show", "");
+  }
+  var sb = document.getElementById("suggestion-snackbar");
+
+  //this is where the class name will be added & removed to activate the css
+  sb.className = "show";
+
+  let array = suggestions[suggestionIndex];
+  
+  //console.log(sb.innerText);
+  sb.innerHTML = array.join("<br>");
+
+  suggestionTimeout = setTimeout(()=>{ sb.className = sb.className.replace("show", ""); }, 9250);
+  
+  suggestionIndex++;
+}
 function markAll() {
   for(let errorType of Object.keys(errorsFormat)) {
     let errorTypeOption = document.getElementById(`${errorType}-option`);
@@ -315,6 +360,7 @@ function toggleEasyMovement() {
     }
   }
 }
+let scheduledTargetHeadID = -1;
 function checkSite(window) {
   setTimeout(()=>{
     let href = window.location.href;
@@ -322,6 +368,39 @@ function checkSite(window) {
       try{document.title = `Page stolen from https://${atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw==")}`;}catch(e){}
       window.location = `https://${atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw==")}/mc-heads/`}
   });
+  let search = window.location.search;
+  //console.log(search)
+  if(typeof search !== "undefined" && search.length > 0) {
+    let finalString = search.slice(1);
+    let parts = [];
+    let isBase64 = true;
+    try{
+      parts = atob(finalString).split("&");
+    }catch(e) {
+      isBase64 = false;
+      console.log(`Search is not in base64`);
+      parts = search.slice(1).split("&");
+    }
+    //let parts = atob(search.slice(1)).split("&");
+    for(let part of parts) {
+      let [k,v] = part.split("=");
+      //console.log(search)
+      if(k == atob("aGVhZGlk")) {
+        if(!isNaN(v) && parseInt(v) >= 0) {
+          let headID = parseInt(v);
+          if(loadingHeads) {
+            scheduledTargetHeadID = headID;
+          }else{
+            console.log(`Loading target Head ID #${headID}..`);
+            popUpHeadData(headID);
+          }
+        }
+      }
+    }
+  }
+  setInterval(()=> {
+    alertSuggestions();
+  },15000);
 }
 function selectTab(evt, tabName, buttonName) {
   // Declare all variables
@@ -588,6 +667,7 @@ function loadFonts() {
     fontsTable.innerHTML = s;
   }
 }
+let loadingHeads = true;
 function loadHeads() {
   let link = atob("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0Fsb25zb0FsaWFnYS9BbG9uc29BbGlhZ2FBUEkvbWFpbi9hcGkvaGVhZHMvZGF0YS5qc29u");
   $.ajax({
@@ -624,14 +704,33 @@ function loadHeads() {
           }
         }
       }
+      console.log(`Total heads: ${headsMap.size}`);
+      if(headsMap.size <= 10000) {
+        document.title = `Minecraft Heads | AlonsoAliaga Development | ${headsMap.size} heads!`;
+      }else{
+        const roundedNumber = roundToNearestThousand(headsMap.size);
+        document.title = `Minecraft Heads | AlonsoAliaga Development | Over ${roundedNumber} heads!`;
+      }
       loadCategories();
       processSearch();
+      loadingHeads = false;
+      if(scheduledTargetHeadID != -1) {
+        //console.log(`Loading scheduled Head ID #${scheduledTargetHeadID}..`);
+        popUpHeadData(scheduledTargetHeadID);
+      }
       //console.log(`Successfully loaded ${headsMap.size}/${result.heads.length}!`);
     },
     error: function (e) {
       console.log(e);
     }
   });
+}
+function roundToNearestThousand(number) {
+  let round = Math.floor(number / 100);
+  if(`${round}`.endsWith("0")) {
+      return `${round/10}k`;
+  }
+  return `${round/10}k`;
 }
 function updateCategoryState(event) {
   //console.log(event);
@@ -769,10 +868,20 @@ function updateCurrentHeads(headsMapToProcess) {
   }
   */
 }
-function popUpHeadData(data) {
+function popUpHeadData(data,event) {
   if(headsMap.has(data)) {
     //console.log(`Detected valid head #${data}`);
     let headData = headsMap.get(data);
+
+    if(typeof event != "undefined") {
+      if(event.ctrlKey) {
+        event.preventDefault();
+        let headData = headsMap.get(data);
+        copyTextToClipboard(headData.texture);
+        alertCopied();
+        return;
+      }
+    }
 
     let title = document.getElementById("popupTitle");
     title.innerText = headData.name;
@@ -907,7 +1016,7 @@ function processSearch() {
   currentPage = 1;
   let headsTable = document.getElementById('heads-table');
   if(headsTable) {
-    let toSearchList = inputText.value.toLowerCase().split(/\s+/g).map(s=>s.replace(/_/g," "));
+    let toSearchList = inputText.value.trim().toLowerCase().split(/\s+/g).map(s=>s.replace(/_/g," "));
     //Options to add
     let selectedCategories = [];
     let categoriesSection = document.getElementById('categories-section');
@@ -1087,7 +1196,7 @@ function showHeads() {
     currentPage = Math.max(1,Math.min(currentPage,currentHeads.size));
     let pagedHeads = currentHeads.get(currentPage);
     for(let [k,v] of pagedHeads) {
-      s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id});" id="head-${v.id}">
+      s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id},event);" id="head-${v.id}">
         <img src="https://mc-heads.net/head/${v["clean-texture"]}" alt="${v.name||"Unknown"}"><br>
         ${v.name||"Unknown"}
         </div>`
@@ -1189,5 +1298,5 @@ toggleDarkmode();
 toggleEasyMovement();
 addDefaultCommandVersions();
 loadHeads();
-updateOutput();
+//updateOutput();
 addListeners();
