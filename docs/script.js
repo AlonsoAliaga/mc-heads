@@ -973,10 +973,18 @@ function addDefaultCommandVersions() {
 }
 function updateCommand(data,headData) {
   let versionData;
-  if(data && data.target && typeof data.target.value != undefined) {
+  if(data && data.target && typeof data.target.value != "undefined") {
     versionData = defaultMinecraftCommandVersions[data.target.value];
   }else{
-    versionData = defaultMinecraftCommandVersions["1_8to1_12_2"];
+    let giveCommandVersion = document.getElementById("giveCommandVersion");
+    if(giveCommandVersion) {
+      if(typeof giveCommandVersion.value != "undefined") {
+        versionData = defaultMinecraftCommandVersions[giveCommandVersion.value];
+      }
+    }
+    if(typeof versionData == "undefined"){
+      versionData = defaultMinecraftCommandVersions["1_8to1_12_2"];
+    }
   }
   if(versionData) {
     if(!headData) {
@@ -990,7 +998,7 @@ function updateCommand(data,headData) {
     //else console.log(`Head ID available from event: ${headData.id}`);
     let popupObtainViaGiveCommand = document.getElementById("popupObtainViaGiveCommand");
     let command = versionData.commandFormat.replace(/{UUID}/g,headData.uuid)
-      .replace(/{HEAD_NAME}/g,headData.name).replace(/{TEXTURE}/g,headData["clean-texture"]);
+      .replace(/{HEAD_NAME}/g,headData.name).replace(/{TEXTURE}/g,headData.texture);
     if(versionData.commandFormat.includes("{1_16_FORMAT_UUID}")) {
       command = command.replace(/{1_16_FORMAT_UUID}/g,to1_16UUIDFormat(headData.uuid))
     }
