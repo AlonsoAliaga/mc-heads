@@ -220,21 +220,29 @@ function alertCopied() {
 
   copiedTimeout = setTimeout(()=>{ sb.className = sb.className.replace("show", ""); }, 3000);
 }
+let usPrefix = `<span style="color: #ff756b;font-size: small;">[EN] </span>`;
+let esPrefix = `<span style="color: #ff756b;font-size: small;">[ES] </span>`;
 let suggestions = [
   [
     `<span style="color: gold"><b>Tip #1:</b></span>`,
-    `<span style="font-size: small;">Use control + click to</span>`,
-    `<span style="font-size: small;">copy texture value!</span>`
+    `${usPrefix}<span style="font-size: small;">Use control + click to</span>`,
+    `<span style="font-size: small;">copy texture value!</span>`,
+    `${esPrefix}<span style="font-size: small;">Usa control + click para</span>`,
+    `<span style="font-size: small;">copiar la textura!</span>`
   ],
   [
     `<span style="color: aqua"><b>Tip #2:</b></span>`,
-    `<span style="font-size: small;">Use your mouse button 'Forward'</span>`,
-    `<span style="font-size: small;">and 'Back' to move between pages!</span>`
+    `${usPrefix}<span style="font-size: small;">Use your mouse button 'Forward'</span>`,
+    `<span style="font-size: small;">and 'Back' to move between pages!</span>`,
+    `${esPrefix}<span style="font-size: small;">Usa los botones laterales de tu</span>`,
+    `<span style="font-size: small;">mouse para navegar entre paginas!</span>`
   ],
   [
     `<span style="color: lime"><b>Tip #3:</b></span>`,
-    `<span style="font-size: small;">Since BetterHeads version 2.0-BETA</span>`,
-    `<span style="font-size: small;">You can use '/bheads get ID' command!</span>`
+    `${usPrefix}<span style="font-size: small;">Since BetterHeads version 2.0-BETA</span>`,
+    `<span style="font-size: small;">You can use '/bheads get ID' command!</span>`,
+    `${esPrefix}<span style="font-size: small;">Desde BetterHeads version 2.0-BETA</span>`,
+    `<span style="font-size: small;">Puedes usar el comando '/bheads get ID'!</span>`
   ],
 ]
 let suggestionIndex = 0;
