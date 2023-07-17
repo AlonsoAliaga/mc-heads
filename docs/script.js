@@ -931,15 +931,15 @@ function popUpHeadData(data,event) {
 const defaultMinecraftCommandVersions = {
   "1_8to1_12_2": {
     name: "1.8 -> 1.12.2",
-    commandFormat: `/minecraft:give @p minecraft:SKULL 1 3 {display:{Name:"{HEAD_NAME}"},SkullOwner:{Id:"{UUID}",Properties:{textures:[{Value:"{TEXTURE}"}]}}}`
+    commandFormat: `/minecraft:give @p minecraft:skull 1 3 {display:{Name:"{HEAD_NAME}"},SkullOwner:{Id:"{UUID}",Properties:{textures:[{Value:"{TEXTURE}"}]}}}`
   },
   "1_13to1_15_1": {
     name: "1.13 -> 1.15.1",
-    commandFormat: `/minecraft:give @p minecraft:PLAYER_HEAD{display:{Name:"{\\"text\\":\\"{HEAD_NAME}\\"}"},SkullOwner:{Id:"{UUID}",Properties:{textures:[{Value:"{TEXTURE}"}]}}} 1`
+    commandFormat: `/minecraft:give @p minecraft:player_head{display:{Name:"{\\"text\\":\\"{HEAD_NAME}\\"}"},SkullOwner:{Id:"{UUID}",Properties:{textures:[{Value:"{TEXTURE}"}]}}} 1`
   },
   "1_16+": {
     name: "1.16+",
-    commandFormat: `/minecraft:give @p minecraft:PLAYER_HEAD{display:{Name:"{\\"text\\":\\"{HEAD_NAME}\\"}"},SkullOwner:{Id:{1_16_FORMAT_UUID},Properties:{textures:[{Value:"{TEXTURE}"}]}}} 1`
+    commandFormat: `/minecraft:give @p minecraft:player_head{display:{Name:"{\\"text\\":\\"{HEAD_NAME}\\"}"},SkullOwner:{Id:{1_16_FORMAT_UUID},Properties:{textures:[{Value:"{TEXTURE}"}]}}} 1`
   },
 }
 const uuidBytes = new Uint8Array(16);
