@@ -713,6 +713,14 @@ function loadHeads() {
         }
       }
       console.log(`Total heads: ${headsMap.size}`);
+
+      //let allIds = [...headsMap.keys()]
+      //let randomId = allIds[Math.floor(Math.random()* allIds.length)];
+      //console.log(`Random ID: ${randomId}`);
+      //let randomHeadData = headsMap.get(randomId);
+      //console.log(randomHeadData);
+      
+
       if(headsMap.size <= 10000) {
         document.title = `Minecraft Heads | AlonsoAliaga Development | ${headsMap.size} heads!`;
       }else{
@@ -727,6 +735,7 @@ function loadHeads() {
         popUpHeadData(scheduledTargetHeadID);
       }
       //console.log(`Successfully loaded ${headsMap.size}/${result.heads.length}!`);
+      
     },
     error: function (e) {
       console.log(e);
@@ -899,7 +908,7 @@ function popUpHeadData(data,event) {
     popupHeadID.dataset.lockedtextvalue = `${headData.id}`;
 
     let popUpImage = document.getElementById("popupHeadImage");
-    popUpImage.src = `https://mc-heads.net/head/${headData["clean-texture"]}`;
+    popUpImage.src = getHeadImageURL(headData);
     popUpImage.alt = headData.name||"Unknown";
 
     let popupBetterHeadsCommand = document.getElementById("popupBetterHeadsCommand");
@@ -1200,6 +1209,15 @@ function updatePages() {
   }
 }
 let headsTable = document.getElementById('heads-table');
+let headAPIs = {
+  1: {
+    baseurl: atob("aHR0cHM6Ly92aXNhZ2Uuc3VyZ2VwbGF5LmNvbS9oZWFkLzUxMi97Q0xFQU5fVEVYVFVSRX0ucG5nP25vPXNoYWRvdyZ5PTcw")
+  },
+  2: {
+    baseurl: atob("aHR0cHM6Ly9tYy1oZWFkcy5uZXQvaGVhZC97Q0xFQU5fVEVYVFVSRX0=")
+  }
+}
+let headApiMode = 1
 function showHeads() {
   let darkMode = document.getElementById('darkmode').checked;
   if(currentHeads.size == 0) {
@@ -1213,13 +1231,23 @@ function showHeads() {
     let pagedHeads = currentHeads.get(currentPage);
     for(let [k,v] of pagedHeads) {
       s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id},event);" id="head-${v.id}">
-        <img src="https://mc-heads.net/head/${v["clean-texture"]}" alt="${v.name||"Unknown"}"><br>
+        <img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"><br>
         ${v.name||"Unknown"}
         </div>`
     }
     headsTable.innerHTML = s;
   }
   updatePages();
+}
+function getHeadImageURL(headData) {
+  return headAPIs[headApiMode].baseurl.replace(/{CLEAN_TEXTURE}/g,headData["clean-texture"]);
+}
+let alerted = false;
+function loadImageFailed() {
+  if(!alerted) {
+    alerted = true;
+    console.log(`Error loading images. If you read this contact support team!`)
+  }
 }
 function generateLinkedPagesArray(range = 3) {
   let totalPages = currentHeads.size;
