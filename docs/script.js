@@ -897,6 +897,15 @@ function popUpHeadData(data,event) {
         copyTextToClipboard(headData.texture);
         alertCopied();
         return;
+      }else if(event.button == 1 || 1 == event.button & 2) { //Middle click?
+        let headData = headsMap.get(data);
+        console.log(`Middle click was detected in head #${headData.id}`)
+        console.log(headData)
+      }else{
+        console.log(`Detected in head #${headData.id} => event.button=${event.button}`)
+        console.log(`event.button=${event.button}`)
+        console.log(`event.which=${event.which}`)
+        console.log(`-----------------------------------------------------`)
       }
     }
 
