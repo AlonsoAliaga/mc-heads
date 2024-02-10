@@ -371,6 +371,7 @@ function toggleEasyMovement() {
 let scheduledTargetHeadID = -1;
 function checkSite(window) {
   setTimeout(()=>{
+    return;
     let href = window.location.href;
     if(!href.includes(atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw=="))) {
       try{document.title = `Page stolen from https://${atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw==")}`;}catch(e){}
@@ -386,20 +387,26 @@ function checkSite(window) {
       parts = atob(finalString).split("&");
     }catch(e) {
       isBase64 = false;
-      console.log(`Search is not in base64`);
+      //console.log(`Search is not in base64`);
       parts = search.slice(1).split("&");
     }
     //let parts = atob(search.slice(1)).split("&");
     for(let part of parts) {
       let [k,v] = part.split("=");
       //console.log(search)
-      if(k == atob("aGVhZGlk")) {
+      if(k == atob("c2hvd2hlYWQ=")) {
+        //console.log(`Detected showhead!`)
+        try{
+          let headData = JSON.parse(atob(v));
+          popUpHeadData(headData);
+        }catch(e) {}
+      }else if(k == atob("aGVhZGlk")) {
         if(!isNaN(v) && parseInt(v) >= 0) {
           let headID = parseInt(v);
           if(loadingHeads) {
             scheduledTargetHeadID = headID;
           }else{
-            console.log(`Loading target Head ID #${headID}..`);
+            //console.log(`Loading target Head ID #${headID}..`);
             popUpHeadData(headID);
           }
         }
@@ -885,31 +892,72 @@ function updateCurrentHeads(headsMapToProcess) {
   }
   */
 }
-function popUpHeadData(data,event) {
+/*
+function checkClick(data,event) {
+  console.log(`Detected onmousedown ${data} | ${event}`);
   if(headsMap.has(data)) {
     //console.log(`Detected valid head #${data}`);
     let headData = headsMap.get(data);
 
     if(typeof event != "undefined") {
+      if(event.button == 1 || 1 == event.button & 2) { //Middle click?
+        let headData = headsMap.get(data);
+        let control = event.ctrlKey;
+        console.log(`Middle click was detected in head #${headData.id} | Control: ${control}`)
+        console.log(headData)
+        //window.open(`https://alonsoaliaga.github.io/mc-heads?headid=${headData.id}`, "_blank");
+        //console.log(event)
+        //window.open(window.location.href,'_self');
+
+        let url = `https://alonsoaliaga.github.io/mc-heads?headid=${headData.id}`;
+        var link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        //link.click();
+        middleClick(link);
+        document.body.removeChild(link);
+        //window.focus();
+      }
+    }
+  }
+}
+*/
+function popUpHeadData(data,event) {
+  console.log(`Detected ${data} | ${event} | data=${typeof data}`);
+  if(headsMap.has(data) || typeof data !== "string") {
+    //console.log(`Detected valid head #${data}`);
+    let headData;
+    if(typeof data === "object") {
+      headData = data;
+    }else headData = headsMap.get(data);
+
+    if(typeof event != "undefined") {
       if(event.ctrlKey) {
         event.preventDefault();
-        let headData = headsMap.get(data);
+        headData = headsMap.get(data);
         copyTextToClipboard(headData.texture);
         alertCopied();
         return;
       }else if(event.button == 1 || 1 == event.button & 2) { //Middle click?
+        /*
         let headData = headsMap.get(data);
         console.log(`Middle click was detected in head #${headData.id}`)
         console.log(headData)
+
+        event.preventDefault();
       }else{
+        event.preventDefault();
+        /*
         console.log(`Detected in head #${headData.id} =>`)
         console.log(`event.button=${event.button}`)
         console.log(`event.which=${event.which}`)
         console.log(`event.button&2=${event.button == 1 || 1 == event.button & 2}`)
         console.log(`-----------------------------------------------------`)
+        */
       }
     }
-
+console.log(headData)
     let title = document.getElementById("popupTitle");
     title.innerText = headData.name;
 
@@ -1240,15 +1288,39 @@ function showHeads() {
     currentPage = Math.max(1,Math.min(currentPage,currentHeads.size));
     let pagedHeads = currentHeads.get(currentPage);
     for(let [k,v] of pagedHeads) {
+      let showEnconde = btoa(JSON.stringify(v));
       s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id},event);" id="head-${v.id}">
-        <img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"><br>
+      <a href="https://alonsoaliaga.github.io/mc-heads?showhead=${showEnconde}"><img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"></a><br>
         ${v.name||"Unknown"}
-        </div>`
+      </div>`
     }
     headsTable.innerHTML = s;
   }
   updatePages();
 }
+/*
+function middleClick(element) {
+  var event = document.createEvent('MouseEvents');
+  event.initMouseEvent(
+    'click',        // event type
+    true,           // can bubble
+    true,           // cancelable
+    window,         // in view
+    0,              // click count
+    0,              // screen X coordinate
+    0,              // screen Y coordinate
+    0,              // client X coordinate
+    0,              // client Y coordinate
+    false,          // control key
+    false,          // alt key
+    false,          // shift key
+    true,           // meta key
+    2,              // button (1: left, 2: middle, 3: right)
+    null            // related target
+  );
+  element.dispatchEvent(event);
+}
+*/
 function getHeadImageURL(headData) {
   return headAPIs[headApiMode].baseurl.replace(/{CLEAN_TEXTURE}/g,headData["clean-texture"]);
 }
