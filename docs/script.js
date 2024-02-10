@@ -923,13 +923,15 @@ function checkClick(data,event) {
 }
 */
 function popUpHeadData(data,event) {
-  console.log(`Detected ${data} | ${event} | data=${typeof data}`);
-  if(headsMap.has(data) || typeof data !== "string") {
+  //console.log(`Detected ${data} | ${event} | data=${typeof data}`);
+  if(headsMap.has(data) || typeof data === "object") {
     //console.log(`Detected valid head #${data}`);
     let headData;
     if(typeof data === "object") {
       headData = data;
-    }else headData = headsMap.get(data);
+    }else {
+      headData = headsMap.get(data);
+    }
 
     if(typeof event != "undefined") {
       if(event.ctrlKey) {
@@ -938,6 +940,8 @@ function popUpHeadData(data,event) {
         copyTextToClipboard(headData.texture);
         alertCopied();
         return;
+      }else if(true) {
+        event.preventDefault();
       }else if(event.button == 1 || 1 == event.button & 2) { //Middle click?
         /*
         let headData = headsMap.get(data);
