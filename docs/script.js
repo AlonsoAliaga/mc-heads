@@ -902,9 +902,10 @@ function popUpHeadData(data,event) {
         console.log(`Middle click was detected in head #${headData.id}`)
         console.log(headData)
       }else{
-        console.log(`Detected in head #${headData.id} => event.button=${event.button}`)
+        console.log(`Detected in head #${headData.id} =>`)
         console.log(`event.button=${event.button}`)
         console.log(`event.which=${event.which}`)
+        console.log(`event.button&2=${event.button == 1 || 1 == event.button & 2}`)
         console.log(`-----------------------------------------------------`)
       }
     }
