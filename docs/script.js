@@ -238,7 +238,16 @@ let suggestions = [
     `<span style="font-size: small;">mouse para navegar entre paginas!</span>`
   ],
   [
-    `<span style="color: lime"><b>Tip #3:</b></span>`,
+    `<span style="color: pink"><b>Tip #3:</b></span>`,
+    `${usPrefix}<span style="font-size: small;">Use your middle click to open</span>`,
+    `<span style="font-size: small;">the head in other tab so you</span>`,
+    `<span style="font-size: small;">don't lose it!</span>`,
+    `${esPrefix}<span style="font-size: small;">Usa el botón medio de tu mouse</span>`,
+    `<span style="font-size: small;">para abrir la cabeza en otra</span>`,
+    `<span style="font-size: small;">pestaña y no perderla!</span>`
+  ],
+  [
+    `<span style="color: lime"><b>Tip #4:</b></span>`,
     `${usPrefix}<span style="font-size: small;">Since BetterHeads version 2.0-BETA</span>`,
     `<span style="font-size: small;">You can use '/bheads get ID' command!</span>`,
     `${esPrefix}<span style="font-size: small;">Desde BetterHeads version 2.0-BETA</span>`,
@@ -247,6 +256,10 @@ let suggestions = [
 ]
 let suggestionIndex = 0;
 let suggestionTimeout;
+
+function toggleSuggestions() {
+  alertSuggestions();
+}
 
 function alertSuggestions() {
   
@@ -258,6 +271,11 @@ function alertSuggestions() {
     clearInterval(suggestionTimeout);
     var sb = document.getElementById("suggestion-snackbar");
     sb.className = sb.className.replace("show", "");
+  }
+  let hideSuggestions = document.getElementById(`hide-suggestions-option`);
+  if(typeof hideSuggestions !== "undefined" && hideSuggestions.checked) {
+
+    return;
   }
   var sb = document.getElementById("suggestion-snackbar");
 
