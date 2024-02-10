@@ -578,8 +578,8 @@ ul {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 95%;
+  height: 95%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
 }
@@ -588,7 +588,7 @@ ul {
   background-color: #fff;
   width: 650px;
   padding: 20px;
-  margin: 50px auto;
+  margin: 40px auto;
 }
 
 #closeButton {
