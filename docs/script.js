@@ -956,7 +956,7 @@ function popUpHeadData(data,event) {
         */
       }
     }
-console.log(headData)
+    //console.log(headData)
     let title = document.getElementById("popupTitle");
     title.innerText = headData.name;
 
