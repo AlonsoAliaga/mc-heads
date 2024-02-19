@@ -386,6 +386,19 @@ function toggleEasyMovement() {
     }
   }
 }
+function toBase64(str) {
+  // Encode the UTF-8 representation of the string
+  const utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(`0x${p1}`));
+  // Convert the UTF-8 bytes to base64
+  return btoa(utf8Bytes);
+}
+
+function fromBase64(base64Str) {
+  // Decode the base64 string to UTF-8 bytes
+  const utf8Bytes = atob(base64Str);
+  // Decode the UTF-8 bytes to a string
+  return decodeURIComponent(Array.from(utf8Bytes).map(byte => `%${(`00${byte.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+}
 let scheduledTargetHeadID = -1;
 function checkSite(window) {
   setTimeout(()=>{
@@ -411,12 +424,17 @@ function checkSite(window) {
     for(let part of parts) {
       let [k,v] = part.split("=");
       //console.log(search)
+      console.log(k,v)
       if(k == atob("c2hvd2hlYWQ=")) {
         //console.log(`Detected showhead!`)
         try{
-          let headData = JSON.parse(fromBinaryStr(atob(v)));
+          let headData = JSON.parse(fromBase64(v));
           popUpHeadData(headData);
-        }catch(e) {}
+          console.log(headData)
+        }catch(e) {
+          console.log(`Error with showhead`)
+          console.log(e)
+        }
       }else if(k == atob("aGVhZGlk")) {
         if(!isNaN(v) && parseInt(v) >= 0) {
           let headID = parseInt(v);
@@ -1309,9 +1327,9 @@ function showHeads() {
     currentPage = Math.max(1,Math.min(currentPage,currentHeads.size));
     let pagedHeads = currentHeads.get(currentPage);
     for(let [k,v] of pagedHeads) {
-      let showEnconde = btoa(toBinaryStr(JSON.stringify(v)));
+      let showEncode = toBase64(JSON.stringify(v));
       s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id},event);" id="head-${v.id}">
-      <a href="https://alonsoaliaga.github.io/mc-heads?showhead=${showEnconde}"><img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"></a><br>
+      <a href="https://alonsoaliaga.github.io/mc-heads?showhead=${showEncode}"><img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"></a><br>
         ${v.name||"Unknown"}
       </div>`
     }
