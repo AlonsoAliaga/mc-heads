@@ -414,7 +414,7 @@ function checkSite(window) {
       if(k == atob("c2hvd2hlYWQ=")) {
         //console.log(`Detected showhead!`)
         try{
-          let headData = JSON.parse(atob(v));
+          let headData = JSON.parse(fromBinaryStr(atob(v)));
           popUpHeadData(headData);
         }catch(e) {}
       }else if(k == atob("aGVhZGlk")) {
@@ -1309,7 +1309,7 @@ function showHeads() {
     currentPage = Math.max(1,Math.min(currentPage,currentHeads.size));
     let pagedHeads = currentHeads.get(currentPage);
     for(let [k,v] of pagedHeads) {
-      let showEnconde = btoa(JSON.stringify(v));
+      let showEnconde = btoa(toBinaryStr(JSON.stringify(v)));
       s+= `<div class="head-icon ${darkMode?"head-icon-dark":"head-icon-light"}" onclick="popUpHeadData(${v.id},event);" id="head-${v.id}">
       <a href="https://alonsoaliaga.github.io/mc-heads?showhead=${showEnconde}"><img src="${getHeadImageURL(v)}" alt="${v.name||"Unknown"}" onerror="loadImageFailed();"></a><br>
         ${v.name||"Unknown"}
@@ -1318,6 +1318,22 @@ function showHeads() {
     headsTable.innerHTML = s;
   }
   updatePages();
+}
+function toBinaryStr(str) {
+  const encoder = new TextEncoder();
+  // 1: split the UTF-16 string into an array of bytes
+  const charCodes = encoder.encode(str);
+  // 2: concatenate byte data to create a binary string
+  return String.fromCharCode(...charCodes);
+}
+function fromBinaryStr(binaryStr) {
+  // Convert the binary string to an array of character codes
+  const charCodes = binaryStr.split('').map(char => char.charCodeAt(0));
+  // Convert the array of character codes to a Uint8Array
+  const uint8Array = new Uint8Array(charCodes);
+  // Create a TextDecoder to decode the Uint8Array to a UTF-16 string
+  const decoder = new TextDecoder('utf-16');
+  return decoder.decode(uint8Array);
 }
 /*
 function middleClick(element) {
