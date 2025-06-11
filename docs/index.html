@@ -40,7 +40,8 @@
     <meta name=msapplication-config content="https://i.imgur.com/uCmSIls.png">
     <meta name="msapplication-TileColor" content="#9a14ff">
   </head>
-  <body onload="loadCounter(); checkSite(window); ">
+  <body onload="loadCounter(); checkSite(window); startChecking();">
+    <div id="online-counter" data-failed="0" style="position: relative;background-color: green;height: 30px;width: 100%;display: flex; align-items: center;justify-content: center;">🟢 0 online searching between more than 80k heads!</div>
     <div class="content">
       <div class="header">
         <h1 style="font-family: MinecraftBold;">Minecraft <a href="https://alonsoaliaga.com/BetterHeads" rel="noopener" target="_blank">Heads</a></h1>
@@ -238,8 +239,14 @@
   <script src="script.js"></script>
   <!-- <script src="script.js"></script> -->
   
+  <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
   <script>
-    
+    kofiWidgetOverlay.draw('alonsoaliaga', {
+      'type': 'floating-chat',
+      'floating-chat.donateButton.text': 'Send love ❤️',
+      'floating-chat.donateButton.background-color': '#fcbf47',
+      'floating-chat.donateButton.text-color': '#323842'
+    });
   </script>
   <span id="currentheadid" style="font-size: 5px; display: none;">0</span>
   </body>

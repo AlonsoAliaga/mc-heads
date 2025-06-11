@@ -501,7 +501,7 @@ ul {
   padding: 16px;
   text-align: center;
   left: 155px;
-  bottom: 30px;
+  bottom: 70px;
   z-index: 10001;
   position: fixed;
 }
@@ -509,8 +509,8 @@ ul {
 /* This will be activated when the snackbar's class is 'show' which will be added through JS */
 #suggestion-snackbar.show {
   visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 9s;
-  animation: fadein 0.5s, fadeout 0.5s 9s;
+  -webkit-animation: fadein70 0.5s, fadeout70 0.5s 9s;
+  animation: fadein70 0.5s, fadeout70 0.5s 9s;
 }
 
 #snackbar {
@@ -548,6 +548,26 @@ ul {
 
 @-webkit-keyframes fadeout {
   from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout70 {
+  from {bottom: 70px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+/* Animations for fading in and out */
+@-webkit-keyframes fadein70 {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 70px; opacity: 1;}
+}
+
+@keyframes fadein70 {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 70px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout70 {
+  from {bottom: 70px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
 }
 
