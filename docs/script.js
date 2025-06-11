@@ -456,6 +456,18 @@ function checkSite(window) {
       }
     }
   }
+  fetch('https://raw.githubusercontent.com/AlonsoAliaga/AlonsoAliagaAPI/refs/heads/main/api/tools/tools-list.json')
+    .then(res => res.json())
+    .then(content => {
+      let toolsData = content;
+      let toolsArray = []
+      for(let toolData of toolsData) {
+        let clazz = typeof toolData.clazz == "undefined" ? "" : ` class="${toolData.clazz}"`;
+        let style = typeof toolData.style == "undefined" ? "" : ` style="${toolData.style}"`;
+        toolsArray.push(`<span>💠</span> <span${clazz}${style}><a title="${toolData.description}" id="tool-priority-${toolData.priority}" href="${toolData.link}">${toolData.name}</a></span>`);
+      }
+      document.getElementById("tools-for-you").innerHTML = toolsArray.join(`<br>`);
+    });
   setInterval(()=> {
     alertSuggestions();
   },15000);
@@ -1427,6 +1439,9 @@ function middleClick(element) {
   element.dispatchEvent(event);
 }
 */
+function processAds() {
+
+}
 function getHeadImageURL(headData) {
   return headAPIs[headApiMode].baseurl.replace(/{CLEAN_TEXTURE}/g,headData["clean-texture"]);
 }
