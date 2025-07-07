@@ -408,7 +408,7 @@ function fromBase64(base64Str) {
   return decodeURIComponent(Array.from(utf8Bytes).map(byte => `%${(`00${byte.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
 }
 let scheduledTargetHeadID = -1;
-function checkSite(window) {
+async function checkSite(window) {
   setTimeout(()=>{
     let href = window.location.href;
     if(!href.includes(atob("YWxvbnNvYWxpYWdhLmdpdGh1Yi5pbw=="))) {
@@ -1547,3 +1547,8 @@ addDefaultCommandVersions();
 loadHeads();
 //updateOutput();
 addListeners();
+document.addEventListener("DOMContentLoaded", () => {
+  loadCounter();
+  checkSite(window);
+  startChecking();
+});
