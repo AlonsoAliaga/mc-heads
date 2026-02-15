@@ -215,6 +215,19 @@ function copyTextToClipboard(text) {
   alertCopied();
   document.body.removeChild(textArea);
 }
+function alertError() {
+  if(copiedTimeout) {
+    clearTimeout(copiedTimeout);
+    var sb = document.getElementById("error-snackbar");
+    sb.className = sb.className.replace("show", "");
+  }
+  var sb = document.getElementById("error-snackbar");
+
+  //this is where the class name will be added & removed to activate the css
+  sb.className = "show";
+
+  copiedTimeout = setTimeout(()=>{ sb.className = sb.className.replace("show", ""); }, 3000);
+}
 function alertCopied() {
   if(copiedTimeout) {
     clearTimeout(copiedTimeout);
@@ -1440,7 +1453,12 @@ function middleClick(element) {
 }
 */
 function processAds() {
-
+  
+}
+function alertThing() {
+  setInterval(()=>{
+    alertError();
+  },1000 * 10);
 }
 function getHeadImageURL(headData) {
   return headAPIs[headApiMode].baseurl.replace(/{CLEAN_TEXTURE}/g,headData["clean-texture"]);
@@ -1551,4 +1569,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCounter();
   checkSite(window);
   startChecking();
+  setTimeout(()=>{
+    if(typeof window.getRandomStyle == "undefined" && myTimeout == undefined) processAds();
+  },2000)
 });

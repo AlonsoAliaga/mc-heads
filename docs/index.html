@@ -56,6 +56,7 @@
           </span>
         </div>
         <span id="suggestion-snackbar"><b>💎 Loading tips.. 💎</b></span>
+        <span id="error-snackbar"><b>⛔ Your AdBlock is breaking the page.⛔<br>Please disable AdBlock!</b></span>
         <span id="snackbar"><b>💎 Successfully Copied! 💎</b><br><span style="font-size: small;">Thanks for using our tool!</span></span>
         <span style="font-family: MinecraftBold;">Options:</span>
         <div id="appearance" style="display: inline-block;font-family: MinecraftBold;padding: 5px 10px 5px 10px;" class="darkbuttonboxes">
@@ -232,7 +233,7 @@
   <script src="autoresize.jquery.min.js"></script>
   <script src="js-yaml.min.js"></script>
   <script src="script.js"></script>
-  <script src="resources.js"></script>
+  <script src="resources.js" onerror="myTimeout = 'inline-block'; alertThing();"></script>
   <!-- <script src="script.js"></script> -->
   
   <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
